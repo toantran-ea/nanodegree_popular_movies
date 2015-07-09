@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+repositories {
+    mavenCentral()
+}
+
 android {
     compileSdkVersion 22
     buildToolsVersion "23.0.0 rc2"
@@ -20,5 +24,8 @@ android {
 }
 
 dependencies {
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
+    compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
