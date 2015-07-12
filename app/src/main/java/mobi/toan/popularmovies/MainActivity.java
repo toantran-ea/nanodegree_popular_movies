@@ -2,15 +2,40 @@ package mobi.toan.popularmovies;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Map;
+
+import mobi.toan.popularmovies.models.PopularMovieData;
+import mobi.toan.popularmovies.rest.RestUtils;
+import mobi.toan.popularmovies.rest.TheMovieDBAPI;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 public class MainActivity extends Activity {
+    private static final  String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Map<String, String> queryParams = RestUtils.createDiscoverRequestParams(true);
+        TheMovieDBAPI.getInstance().getService().discoverMovies(queryParams, new Callback<PopularMovieData>() {
+            @Override
+            public void success(PopularMovieData popularMovieData, Response response) {
+                Log.e(TAG, "ok >> " + popularMovieData.toString());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(TAG, "failed " + error.getMessage());
+            }
+        });
+
     }
 
     @Override
