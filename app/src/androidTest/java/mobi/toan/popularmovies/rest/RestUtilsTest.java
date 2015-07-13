@@ -30,6 +30,13 @@ public class RestUtilsTest extends TestCase{
         assertEquals(expectedParams, RestUtils.createDiscoverRequestParams(true));
     }
 
+    public void testGetPosterPath() throws Exception {
+        boolean isPhone = true;
+        String postPath = "/my_photo_path";
+        String expectedPath = "http://image.tmdb.org/t/p/w185/my_photo_path";
+        assertEquals(expectedPath, RestUtils.getPosterPath(postPath, isPhone));
+    }
+
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();

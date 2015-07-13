@@ -21,4 +21,8 @@ public class RestUtils {
         map.put(Constants.PARAM_API_KEY, Credentials.API_KEY);
         return map;
     }
+
+    public static String getPosterPath(String path, boolean isPhone) {
+        return Constants.POSTER_PATH + (isPhone ? Constants.POSTER_PHONE : Constants.POSTER_TABLET) + path;
+    }
 }

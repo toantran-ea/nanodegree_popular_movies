@@ -1,6 +1,8 @@
 package mobi.toan.popularmovies;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -8,6 +10,7 @@ import android.view.MenuItem;
 
 import java.util.Map;
 
+import mobi.toan.popularmovies.fragments.PopularMoviesFragment;
 import mobi.toan.popularmovies.models.PopularMovieData;
 import mobi.toan.popularmovies.rest.RestUtils;
 import mobi.toan.popularmovies.rest.TheMovieDBAPI;
@@ -23,19 +26,11 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Map<String, String> queryParams = RestUtils.createDiscoverRequestParams(true);
-        TheMovieDBAPI.getInstance().getService().discoverMovies(queryParams, new Callback<PopularMovieData>() {
-            @Override
-            public void success(PopularMovieData popularMovieData, Response response) {
-                Log.e(TAG, "ok >> " + popularMovieData.toString());
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.e(TAG, "failed " + error.getMessage());
-            }
-        });
-
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        PopularMoviesFragment popularMoviesFragment = PopularMoviesFragment.newInstance();
+        fragmentTransaction.add(R.id.main_fragment_container, popularMoviesFragment);
+        fragmentTransaction.commit();
     }
 
     @Override
