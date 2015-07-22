@@ -2,6 +2,7 @@ package mobi.toan.popularmovies.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,11 +14,14 @@ import android.view.ViewGroup;
 
 import java.util.Map;
 
+import mobi.toan.popularmovies.Constants;
+import mobi.toan.popularmovies.MovieDetailActivity;
 import mobi.toan.popularmovies.R;
 import mobi.toan.popularmovies.models.PopularMovieData;
 import mobi.toan.popularmovies.rest.RestUtils;
 import mobi.toan.popularmovies.rest.TheMovieDBAPI;
 import mobi.toan.popularmovies.views.PopularMovieAdapter;
+import mobi.toan.popularmovies.views.RecyclerItemClickListener;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -94,6 +98,18 @@ public class PopularMoviesFragment extends Fragment {
         mLayoutManager = new GridLayoutManager(getActivity(), GRID_COLUMNS);
         mPopularMovieRecyclerView.setLayoutManager(mLayoutManager);
         mPopularMovieRecyclerView.setAdapter(mAdapter);
+        mPopularMovieRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                PopularMovieData.Movie movie = mAdapter.getItem(position);
+                Log.e(TAG, movie.toString());
+                Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.MOVIE_ID, movie.getId());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        }));
     }
 
     private void presentMovieData(PopularMovieData popularMovieData) {

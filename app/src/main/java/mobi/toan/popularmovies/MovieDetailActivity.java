@@ -1,38 +1,37 @@
 package mobi.toan.popularmovies;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import mobi.toan.popularmovies.fragments.MovieDetailsFragment;
 import mobi.toan.popularmovies.fragments.PopularMoviesFragment;
 
-public class MainActivity extends AppCompatActivity {
-    private static final  String TAG = MainActivity.class.getSimpleName();
+public class MovieDetailActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_movie_detail);
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        PopularMoviesFragment popularMoviesFragment = PopularMoviesFragment.newInstance();
-        fragmentTransaction.add(R.id.main_fragment_container, popularMoviesFragment);
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        String movieId = bundle.getString(Constants.MOVIE_ID);
+        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance(movieId);
+        fragmentTransaction.add(R.id.movie_details_fragment_container, movieDetailsFragment);
         fragmentTransaction.commit();
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_movie_detail, menu);
         return true;
     }
 

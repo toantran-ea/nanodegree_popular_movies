@@ -12,4 +12,5 @@ public class Constants {
     public static final String PARAM_SORT_BY = "sort_by";
     public static final String PARAM_VALUE_POPULARITY_DESC = "popularity.desc";
     public static final String PARAM_VALUE_HIGHEST_RATE = "vote_average.desc";
+    public static final String MOVIE_ID = "movie-id";
 }

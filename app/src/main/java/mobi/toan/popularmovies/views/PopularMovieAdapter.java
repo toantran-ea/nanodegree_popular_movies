@@ -44,6 +44,10 @@ public class PopularMovieAdapter extends RecyclerView.Adapter<PopularMovieAdapte
         notifyDataSetChanged();
     }
 
+    public PopularMovieData.Movie getItem(int position) {
+        return mDataSet.get(position);
+    }
+
     @Override
     public PopularMovieAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
