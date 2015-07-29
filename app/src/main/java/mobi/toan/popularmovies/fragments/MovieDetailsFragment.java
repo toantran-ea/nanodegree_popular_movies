@@ -7,11 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import mobi.toan.popularmovies.R;
 
 public class MovieDetailsFragment extends Fragment {
     public static final String MOVIE_ID = "movie_id";
+    private View mFragmentView;
 
     public static MovieDetailsFragment newInstance(String movieId){
         MovieDetailsFragment fragment = new MovieDetailsFragment();
@@ -34,9 +36,9 @@ public class MovieDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_movie_details2, container, false);
-        initializeComponents(root);
-        return root;
+        mFragmentView = inflater.inflate(R.layout.fragment_movie_details, container, false);
+        initializeComponents(mFragmentView);
+        return mFragmentView;
     }
 
     @Override
@@ -53,5 +55,9 @@ public class MovieDetailsFragment extends Fragment {
         Bundle args  = getArguments();
         String movieId = args.get(MOVIE_ID).toString();
         Log.e("movie details", ">> " + movieId);
+    }
+
+    private void renderStaticFields(View rootView) {
+
     }
 }

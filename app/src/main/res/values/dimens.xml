@@ -4,7 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fragment_padding">16dp</dimen>
     <dimen name="movie_details_fragment_views_margin">16dp</dimen>
-    <dimen name="movie_details_fragment_main_title_height">150dp</dimen>
+    <dimen name="movie_details_fragment_main_title_height">120dp</dimen>
     <dimen name="text_view_padding">10dp</dimen>
     <dimen name="movie_details_main_title_text_size">46sp</dimen>
     <dimen name="movie_details_poster_width">120dp</dimen>
@@ -17,4 +17,8 @@
     <dimen name="splitter_thin">1dp</dimen>
     <dimen name="movie_details_trailers_text_size">20sp</dimen>
     <dimen name="movie_details_card_view_elevation">10dp</dimen>
+    <dimen name="detail_backdrop_height">256dp</dimen>
+    <dimen name="card_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="list_item_avatar_size">40dp</dimen>
 </resources>
