@@ -84,4 +84,17 @@ public class MovieDetails {
         public void setRating(String rating) {
             mRating = rating;
         }
+
+    @Override
+    public String toString() {
+        return "MovieDetails{" +
+                "id='" + id + '\'' +
+                ", mTitle='" + mTitle + '\'' +
+                ", mOverview='" + mOverview + '\'' +
+                ", mPosterPath='" + mPosterPath + '\'' +
+                ", mLength='" + mLength + '\'' +
+                ", mYear='" + mYear + '\'' +
+                ", mRating='" + mRating + '\'' +
+                '}';
+    }
 }

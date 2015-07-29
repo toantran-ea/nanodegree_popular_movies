@@ -59,7 +59,7 @@ public class PopularMovieAdapter extends RecyclerView.Adapter<PopularMovieAdapte
     @Override
     public void onBindViewHolder(PopularMovieAdapter.ViewHolder holder, int position) {
         PopularMovieData.Movie item = mDataSet.get(position);
-        String path = RestUtils.getPosterPath(item.getPosterPath(), false);
+        String path = RestUtils.getPosterPath(item.getPosterPath());
         Picasso.with(mContext).load(path).into(holder.imageView);
     }
 

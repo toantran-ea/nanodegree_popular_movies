@@ -22,7 +22,7 @@ public class RestUtils {
         return map;
     }
 
-    public static String getPosterPath(String path, boolean isPhone) {
-        return Constants.POSTER_PATH + (isPhone ? Constants.POSTER_PHONE : Constants.POSTER_TABLET) + path;
+    public static String getPosterPath(String path) {
+        return Constants.POSTER_PATH + Constants.POSTER_TABLET + path;
     }
 }

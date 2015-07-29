@@ -10,7 +10,9 @@ public class Constants {
     public static final String POSTER_TABLET = "/w500";
     public static final String PARAM_API_KEY = "api_key";
     public static final String PARAM_SORT_BY = "sort_by";
+    public static final String PARAM_LANG = "language";
     public static final String PARAM_VALUE_POPULARITY_DESC = "popularity.desc";
     public static final String PARAM_VALUE_HIGHEST_RATE = "vote_average.desc";
     public static final String MOVIE_ID = "movie-id";
+    public static final String LANG_639_ISO = "en";
 }
