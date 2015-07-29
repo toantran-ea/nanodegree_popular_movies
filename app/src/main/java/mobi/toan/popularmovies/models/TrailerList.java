@@ -19,6 +19,13 @@ public class TrailerList {
         this.trailers = trailers;
     }
 
+    @Override
+    public String toString() {
+        return "TrailerList{" +
+                "trailers=" + trailers +
+                '}';
+    }
+
     public static class Trailer {
         @JsonProperty("id")
         private String mId;
@@ -28,6 +35,9 @@ public class TrailerList {
 
         @JsonProperty("site")
         private String mSite;
+
+        @JsonProperty("key")
+        private String mKey;
 
         public String getId() {
             return mId;
@@ -51,6 +61,24 @@ public class TrailerList {
 
         public void setSite(String site) {
             mSite = site;
+        }
+
+        public String getKey() {
+            return mKey;
+        }
+
+        public void setKey(String key) {
+            mKey = key;
+        }
+
+        @Override
+        public String toString() {
+            return "Trailer{" +
+                    "mId='" + mId + '\'' +
+                    ", mName='" + mName + '\'' +
+                    ", mSite='" + mSite + '\'' +
+                    ", mKey='" + mKey + '\'' +
+                    '}';
         }
     }
 

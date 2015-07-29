@@ -3,6 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
+              android:background="@android:color/white"
               tools:context="mobi.toan.popularmovies.fragments.MovieDetailsFragment">
 
     <!-- Movie title -->
@@ -84,17 +85,27 @@
                 android:textStyle="bold"/>
 
             <Button
+                android:id="@+id/favourite_mark_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rating_text_view"
                 android:layout_marginTop="@dimen/movie_details_info_text_view_margin_top"
                 android:background="@android:color/holo_orange_dark"
-                android:padding="@dimen/movie_details_text_view_margin"
                 android:paddingLeft="@dimen/movie_details_text_view_margin"
+                android:paddingRight="@dimen/movie_details_text_view_margin"
                 android:text="@string/mark_as_favorite"
                 android:textColor="@android:color/white"/>
 
         </RelativeLayout>
+        <TextView
+
+            android:layout_marginTop="@dimen/movie_details_fragment_views_margin"
+            android:layout_below="@id/poster_image_view"
+            android:layout_width="match_parent"
+            android:maxLines="5"
+            android:ellipsize="end"
+            android:layout_height="wrap_content"
+            android:id="@+id/synopsis_text_view"/>
     </RelativeLayout>
 
     <!-- splitter view -->
@@ -114,5 +125,13 @@
         android:text="@string/text_trailers"
         android:textSize="@dimen/movie_details_trailers_text_size"/>
 
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginLeft="@dimen/movie_details_fragment_views_margin"
+        android:layout_marginRight="@dimen/movie_details_fragment_views_margin"
+        android:id="@+id/trailers_recycler_view"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

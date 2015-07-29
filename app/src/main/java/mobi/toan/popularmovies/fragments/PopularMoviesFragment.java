@@ -92,7 +92,7 @@ public class PopularMoviesFragment extends Fragment {
     }
 
     private void initUIComponents(View rootView) {
-        mPopularMovieRecyclerView = (RecyclerView) rootView.findViewById(R.id.popuar_movie_recyclerview);
+        mPopularMovieRecyclerView = (RecyclerView) rootView.findViewById(R.id.popular_movie_recyclerview);
         mPopularMovieRecyclerView.setHasFixedSize(true);
         mAdapter = new PopularMovieAdapter(getActivity(), null);
         mLayoutManager = new GridLayoutManager(getActivity(), GRID_COLUMNS);

@@ -1,8 +1,9 @@
 package mobi.toan.popularmovies.fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.okhttp.internal.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.Map;
@@ -18,9 +18,10 @@ import java.util.Map;
 import mobi.toan.popularmovies.Constants;
 import mobi.toan.popularmovies.R;
 import mobi.toan.popularmovies.models.MovieDetails;
+import mobi.toan.popularmovies.models.TrailerList;
 import mobi.toan.popularmovies.rest.RestUtils;
 import mobi.toan.popularmovies.rest.TheMovieDBAPI;
-import mobi.toan.popularmovies.rest.TheMovieDBService;
+import mobi.toan.popularmovies.views.TrailerRecyclerViewAdapter;
 import mobi.toan.popularmovies.views.Utils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -31,6 +32,9 @@ public class MovieDetailsFragment extends Fragment {
     public static final String MOVIE_ID = "movie_id";
     private View mFragmentView;
     private String mMovieId;
+    private RecyclerView mTrailerRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private TrailerRecyclerViewAdapter mAdapter;
 
     public static MovieDetailsFragment newInstance(String movieId){
         MovieDetailsFragment fragment = new MovieDetailsFragment();
@@ -68,13 +72,15 @@ public class MovieDetailsFragment extends Fragment {
     private void initializeComponents(View rootView) {
         Bundle args  = getArguments();
         mMovieId = args.get(MOVIE_ID).toString();
-        Log.e("movie details", ">> " + mMovieId);
+        mTrailerRecyclerView = (RecyclerView) rootView.findViewById(R.id.trailers_recycler_view);
+        mTrailerRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mTrailerRecyclerView.setLayoutManager(mLayoutManager);
     }
 
     private void getMovieDetails() {
-
         Map<String, String> baseParams = RestUtils.createBaseRequestParam();
-        TheMovieDBAPI.getInstance().getService().getMovieDetails(baseParams, movieId, new Callback<MovieDetails>() {
+        TheMovieDBAPI.getInstance().getService().getMovieDetails(baseParams, mMovieId, new Callback<MovieDetails>() {
             @Override
             public void success(MovieDetails movieDetails, Response response) {
                 Log.e(TAG, movieDetails.toString());
@@ -91,7 +97,18 @@ public class MovieDetailsFragment extends Fragment {
     private void getTrailers() {
         Map<String, String> params = RestUtils.createBaseRequestParam();
         params.put(Constants.PARAM_LANG, Constants.LANG_639_ISO);
-        TheMovieDBAPI.getInstance().getService().getTrailers(params, );
+        TheMovieDBAPI.getInstance().getService().getTrailers(params, mMovieId, new Callback<TrailerList>() {
+            @Override
+            public void success(TrailerList trailerList, Response response) {
+                Log.e(TAG, trailerList.toString());
+                renderTrailers(trailerList);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 
     private void renderStaticFields(View rootView, MovieDetails movieDetails) {
@@ -105,5 +122,12 @@ public class MovieDetailsFragment extends Fragment {
         ratingTextView.setText(Utils.getRating(movieDetails.getRating()));
         ImageView posterImageView = (ImageView) rootView.findViewById(R.id.poster_image_view);
         Picasso.with(getActivity()).load(RestUtils.getPosterPath(movieDetails.getPosterPath())).into(posterImageView);
+        TextView synopsisTextView = (TextView) rootView.findViewById(R.id.synopsis_text_view);
+        synopsisTextView.setText(movieDetails.getOverview());
+    }
+
+    private void renderTrailers(TrailerList trailerList) {
+        mAdapter = new TrailerRecyclerViewAdapter(getActivity(), trailerList);
+        mTrailerRecyclerView.setAdapter(mAdapter);
     }
 }
