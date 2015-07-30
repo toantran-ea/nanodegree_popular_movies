@@ -37,7 +37,7 @@ public class DBUtils {
     }
 
     public boolean isFavourited(String movieId) {
-        return false;
+        return mDefaultRealm.where(FavouriteMovie.class).equalTo(Constants.MOVIE_ID_DB, movieId).findAll().size() == 1;
     }
 
     public boolean addToFavourite(MovieDetails movieDetails) {

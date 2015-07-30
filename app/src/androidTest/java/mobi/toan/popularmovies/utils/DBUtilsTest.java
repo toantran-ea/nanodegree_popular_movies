@@ -57,6 +57,12 @@ public class DBUtilsTest extends AndroidTestCase {
         assertTrue(DBUtils.getDefaultInstance().deleteDB(getContext()));
     }
 
+    public void testIsFavourite() {
+        MovieDetails movieDetails = createTestMovieDetails();
+        assertTrue(DBUtils.getDefaultInstance().addToFavourite(movieDetails));
+        assertTrue(DBUtils.getDefaultInstance().isFavourited(movieDetails.getId()));
+    }
+
 
     private MovieDetails createTestMovieDetails() {
         MovieDetails movieDetails = new MovieDetails();
