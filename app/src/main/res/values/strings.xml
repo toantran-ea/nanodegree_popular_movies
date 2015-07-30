@@ -17,4 +17,5 @@
 
     <!-- error messages -->
     <string name="error_network_request">Error while performing network request</string>
+    <string name="text_reviews">Reviews</string>
 </resources>

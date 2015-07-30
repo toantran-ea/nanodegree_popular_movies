@@ -5,12 +5,23 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import de.greenrobot.event.EventBus;
 import mobi.toan.popularmovies.fragments.MovieDetailsFragment;
+import mobi.toan.popularmovies.fragments.ReviewFragment;
+import mobi.toan.popularmovies.models.MovieDetails;
+import mobi.toan.popularmovies.models.events.ReviewFragmentRequestMessage;
 
 public class MovieDetailActivity extends Activity {
+    private static String TAG = MovieDetailActivity.class.getSimpleName();
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +36,28 @@ public class MovieDetailActivity extends Activity {
         MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance(movieId);
         fragmentTransaction.add(R.id.movie_details_fragment_container, movieDetailsFragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    public void onEvent(ReviewFragmentRequestMessage event) {
+        // add review fragment into this view.
+        Log.e(TAG, "Opening Review fragment for movie " + event.getMovieId());
+        // Create new fragment and transaction
+        ReviewFragment reviewFragment = ReviewFragment.newInstance(event.getMovieId());
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack
+        transaction.replace(R.id.movie_details_fragment_container, reviewFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
     }
 
     @Override

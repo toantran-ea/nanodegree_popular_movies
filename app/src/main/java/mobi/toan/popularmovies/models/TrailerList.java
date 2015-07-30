@@ -1,12 +1,14 @@
 package mobi.toan.popularmovies.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 /**
- * Created by EastAgile Team on 7/29/15.
+ * Created by toan on 7/29/15.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TrailerList {
     @JsonProperty("results")
     private List<Trailer> trailers;

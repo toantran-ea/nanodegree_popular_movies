@@ -13,7 +13,7 @@ public class MovieDetails {
     @JsonProperty("original_title")
     private String mTitle;
 
-    @JsonProperty("mOverview")
+    @JsonProperty("overview")
     private String mOverview;
 
     @JsonProperty("poster_path")
@@ -92,5 +92,19 @@ public class MovieDetails {
 
     public void setTrailerList(TrailerList trailerList) {
         mTrailerList = trailerList;
+    }
+
+    @Override
+    public String toString() {
+        return "MovieDetails{" +
+                "id='" + id + '\'' +
+                ", mTitle='" + mTitle + '\'' +
+                ", mOverview='" + mOverview + '\'' +
+                ", mPosterPath='" + mPosterPath + '\'' +
+                ", mLength='" + mLength + '\'' +
+                ", mYear='" + mYear + '\'' +
+                ", mRating='" + mRating + '\'' +
+                ", mTrailerList=" + mTrailerList +
+                '}';
     }
 }

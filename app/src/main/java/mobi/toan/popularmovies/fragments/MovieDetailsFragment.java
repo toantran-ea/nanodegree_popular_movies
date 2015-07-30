@@ -1,6 +1,7 @@
 package mobi.toan.popularmovies.fragments;
 
 import android.app.Fragment;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,10 +18,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Map;
 
+import de.greenrobot.event.EventBus;
 import mobi.toan.popularmovies.Constants;
 import mobi.toan.popularmovies.R;
 import mobi.toan.popularmovies.models.MovieDetails;
 import mobi.toan.popularmovies.models.TrailerList;
+import mobi.toan.popularmovies.models.events.ReviewFragmentRequestMessage;
 import mobi.toan.popularmovies.rest.RestUtils;
 import mobi.toan.popularmovies.rest.TheMovieDBAPI;
 import mobi.toan.popularmovies.utils.DBUtils;
@@ -91,6 +94,13 @@ public class MovieDetailsFragment extends Fragment {
                 onFavouriteChanged();
             }
         });
+        TextView reviewTextView = (TextView) rootView.findViewById(R.id.review_text_view);
+        reviewTextView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                EventBus.getDefault().post(new ReviewFragmentRequestMessage(mMovieId));
+            }
+        });
     }
 
     private void getMovieDetails() {
@@ -142,6 +152,8 @@ public class MovieDetailsFragment extends Fragment {
         Picasso.with(getActivity()).load(RestUtils.getPosterPath(movieDetails.getPosterPath())).into(posterImageView);
         TextView synopsisTextView = (TextView) rootView.findViewById(R.id.synopsis_text_view);
         synopsisTextView.setText(movieDetails.getOverview());
+        TextView reviewTextView = (TextView) rootView.findViewById(R.id.review_text_view);
+        reviewTextView.setPaintFlags(reviewTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 
     private void renderTrailers(TrailerList trailerList) {

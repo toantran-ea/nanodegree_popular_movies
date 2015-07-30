@@ -24,4 +24,5 @@
     <dimen name="synopsis_margin_top">10dp</dimen>
     <dimen name="trailer_play_icon_width_height">48dp</dimen>
     <dimen name="trailer_icon_size">40dp</dimen>
+    <dimen name="text_review_margin_top">10dp</dimen>
 </resources>

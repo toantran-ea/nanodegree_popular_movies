@@ -4,6 +4,7 @@ import java.util.Map;
 
 import mobi.toan.popularmovies.models.MovieDetails;
 import mobi.toan.popularmovies.models.PopularMovieData;
+import mobi.toan.popularmovies.models.ReviewList;
 import mobi.toan.popularmovies.models.TrailerList;
 import retrofit.Callback;
 import retrofit.http.GET;
@@ -22,4 +23,7 @@ public interface  TheMovieDBService {
 
     @GET("/movie/{id}/videos")
     void getTrailers(@QueryMap Map<String, String> options, @Path("id") String movieId, Callback<TrailerList> callback);
+
+    @GET("/movie/{id}/reviews")
+    void getReviews(@QueryMap Map<String, String> options, @Path("id") String movieId, Callback<ReviewList> callback);
 }
