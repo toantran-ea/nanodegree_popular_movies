@@ -13,7 +13,7 @@ public class MovieDetails {
     @JsonProperty("original_title")
     private String mTitle;
 
-    @JsonProperty("overview")
+    @JsonProperty("mOverview")
     private String mOverview;
 
     @JsonProperty("poster_path")
@@ -29,72 +29,59 @@ public class MovieDetails {
     private String mRating;
 
 
-        public String getId() {
-            return id;
-        }
+    public String getId() {
+        return id;
+    }
 
-        public void setId(String id) {
-            this.id = id;
-        }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-        public String getTitle() {
-            return mTitle;
-        }
+    public String getTitle() {
+        return mTitle;
+    }
 
-        public void setTitle(String title) {
-            mTitle = title;
-        }
+    public void setTitle(String title) {
+        this.mTitle = title;
+    }
 
-        public String getOverview() {
-            return mOverview;
-        }
+    public String getOverview() {
+        return mOverview;
+    }
 
-        public void setOverview(String overview) {
-            mOverview = overview;
-        }
+    public void setOverview(String overview) {
+        this.mOverview = overview;
+    }
 
-        public String getPosterPath() {
-            return mPosterPath;
-        }
+    public String getPosterPath() {
+        return mPosterPath;
+    }
 
-        public void setPosterPath(String posterPath) {
-            mPosterPath = posterPath;
-        }
+    public void setPosterPath(String posterPath) {
+        this.mPosterPath = posterPath;
+    }
 
-        public String getLength() {
-            return mLength;
-        }
+    public String getLength() {
+        return mLength;
+    }
 
-        public void setLength(String length) {
-            mLength = length;
-        }
+    public void setLength(String length) {
+        this.mLength = length;
+    }
 
-        public String getYear() {
-            return mYear;
-        }
+    public String getYear() {
+        return mYear;
+    }
 
-        public void setYear(String year) {
-            mYear = year;
-        }
+    public void setYear(String year) {
+        this.mYear = year;
+    }
 
-        public String getRating() {
-            return mRating;
-        }
+    public String getRating() {
+        return mRating;
+    }
 
-        public void setRating(String rating) {
-            mRating = rating;
-        }
-
-    @Override
-    public String toString() {
-        return "MovieDetails{" +
-                "id='" + id + '\'' +
-                ", mTitle='" + mTitle + '\'' +
-                ", mOverview='" + mOverview + '\'' +
-                ", mPosterPath='" + mPosterPath + '\'' +
-                ", mLength='" + mLength + '\'' +
-                ", mYear='" + mYear + '\'' +
-                ", mRating='" + mRating + '\'' +
-                '}';
+    public void setRating(String rating) {
+        this.mRating = rating;
     }
 }

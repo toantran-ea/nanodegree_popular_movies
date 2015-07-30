@@ -16,4 +16,5 @@ public class Constants {
     public static final String MOVIE_ID = "movie-id";
     public static final String LANG_639_ISO = "en";
     public static final String YOUTUBE_SITE = "YouTube";
+    public static final String MOVIE_ID_DB = "id";
 }

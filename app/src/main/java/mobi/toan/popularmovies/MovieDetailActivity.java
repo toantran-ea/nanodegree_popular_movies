@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import mobi.toan.popularmovies.fragments.MovieDetailsFragment;
-import mobi.toan.popularmovies.fragments.PopularMoviesFragment;
 
 public class MovieDetailActivity extends Activity {
 
@@ -22,7 +21,7 @@ public class MovieDetailActivity extends Activity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        String movieId = bundle.getString(Constants.MOVIE_ID);
+        String movieId = bundle.getString(Constants.MOVIE_ID_DB);
         MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance(movieId);
         fragmentTransaction.add(R.id.movie_details_fragment_container, movieDetailsFragment);
         fragmentTransaction.commit();

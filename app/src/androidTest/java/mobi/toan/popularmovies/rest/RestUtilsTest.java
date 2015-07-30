@@ -31,10 +31,9 @@ public class RestUtilsTest extends TestCase{
     }
 
     public void testGetPosterPath() throws Exception {
-        boolean isPhone = true;
         String postPath = "/my_photo_path";
         String expectedPath = "http://image.tmdb.org/t/p/w185/my_photo_path";
-        assertEquals(expectedPath, RestUtils.getPosterPath(postPath, isPhone));
+        assertEquals(expectedPath, RestUtils.getPosterPath(postPath));
     }
 
     @Override

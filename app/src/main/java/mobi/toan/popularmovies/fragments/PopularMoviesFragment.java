@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,7 +104,7 @@ public class PopularMoviesFragment extends Fragment {
                 Log.e(TAG, movie.toString());
                 Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString(Constants.MOVIE_ID, movie.getId());
+                bundle.putString(Constants.MOVIE_ID_DB, movie.getId());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
