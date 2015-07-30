@@ -2,6 +2,9 @@ apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
+    maven {
+        url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+    }
 }
 
 android {
@@ -39,6 +42,6 @@ dependencies {
     compile 'com.android.support:design:22.2.0'
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'net.steamcrafted:materialiconlib:1.0.3'
-    compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'io.realm:realm-android:0.82.0-SNAPSHOT'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

@@ -1,4 +1,4 @@
-package mobi.toan.popularmovies.views;
+package mobi.toan.popularmovies.utils;
 
 import java.text.DateFormat;
 import java.text.ParseException;

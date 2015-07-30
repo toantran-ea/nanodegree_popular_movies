@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,7 +23,7 @@ import mobi.toan.popularmovies.models.TrailerList;
 import mobi.toan.popularmovies.rest.RestUtils;
 import mobi.toan.popularmovies.rest.TheMovieDBAPI;
 import mobi.toan.popularmovies.views.TrailerRecyclerViewAdapter;
-import mobi.toan.popularmovies.views.Utils;
+import mobi.toan.popularmovies.utils.Utils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -35,6 +36,7 @@ public class MovieDetailsFragment extends Fragment {
     private RecyclerView mTrailerRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private TrailerRecyclerViewAdapter mAdapter;
+    private Button mFavouriteButton;
 
     public static MovieDetailsFragment newInstance(String movieId){
         MovieDetailsFragment fragment = new MovieDetailsFragment();
@@ -76,6 +78,13 @@ public class MovieDetailsFragment extends Fragment {
         mTrailerRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mTrailerRecyclerView.setLayoutManager(mLayoutManager);
+        mFavouriteButton = (Button) rootView.findViewById(R.id.favourite_mark_button);
+        mFavouriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onFavouriteChanged();
+            }
+        });
     }
 
     private void getMovieDetails() {
@@ -129,5 +138,9 @@ public class MovieDetailsFragment extends Fragment {
     private void renderTrailers(TrailerList trailerList) {
         mAdapter = new TrailerRecyclerViewAdapter(getActivity(), trailerList);
         mTrailerRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void onFavouriteChanged() {
+
     }
 }
