@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -22,6 +23,7 @@ import mobi.toan.popularmovies.models.MovieDetails;
 import mobi.toan.popularmovies.models.TrailerList;
 import mobi.toan.popularmovies.rest.RestUtils;
 import mobi.toan.popularmovies.rest.TheMovieDBAPI;
+import mobi.toan.popularmovies.utils.DBUtils;
 import mobi.toan.popularmovies.views.TrailerRecyclerViewAdapter;
 import mobi.toan.popularmovies.utils.Utils;
 import retrofit.Callback;
@@ -37,6 +39,8 @@ public class MovieDetailsFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private TrailerRecyclerViewAdapter mAdapter;
     private Button mFavouriteButton;
+    private MovieDetails mMovieDetails;
+    private Toast mToast;
 
     public static MovieDetailsFragment newInstance(String movieId){
         MovieDetailsFragment fragment = new MovieDetailsFragment();
@@ -68,17 +72,19 @@ public class MovieDetailsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         getMovieDetails();
-        getTrailers();
     }
 
     private void initializeComponents(View rootView) {
         Bundle args  = getArguments();
-        mMovieId = args.get(MOVIE_ID).toString();
+        mMovieId = args.getString(MOVIE_ID);
         mTrailerRecyclerView = (RecyclerView) rootView.findViewById(R.id.trailers_recycler_view);
         mTrailerRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mTrailerRecyclerView.setLayoutManager(mLayoutManager);
         mFavouriteButton = (Button) rootView.findViewById(R.id.favourite_mark_button);
+        if(DBUtils.getDefaultInstance().isFavourited(mMovieId)) {
+            mFavouriteButton.setText(getActivity().getString(R.string.label_favourited));
+        }
         mFavouriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,12 +98,14 @@ public class MovieDetailsFragment extends Fragment {
         TheMovieDBAPI.getInstance().getService().getMovieDetails(baseParams, mMovieId, new Callback<MovieDetails>() {
             @Override
             public void success(MovieDetails movieDetails, Response response) {
-                Log.e(TAG, movieDetails.toString());
+                mMovieDetails = movieDetails;
                 renderStaticFields(mFragmentView, movieDetails);
+                getTrailers();
             }
 
             @Override
             public void failure(RetrofitError error) {
+                showToastMessage(getString(R.string.error_network_request));
                 Log.e(TAG, error.getMessage());
             }
         });
@@ -109,13 +117,14 @@ public class MovieDetailsFragment extends Fragment {
         TheMovieDBAPI.getInstance().getService().getTrailers(params, mMovieId, new Callback<TrailerList>() {
             @Override
             public void success(TrailerList trailerList, Response response) {
-                Log.e(TAG, trailerList.toString());
                 renderTrailers(trailerList);
+                mMovieDetails.setTrailerList(trailerList);
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                showToastMessage(getString(R.string.error_network_request));
+                Log.e(TAG, error.getMessage());
             }
         });
     }
@@ -141,6 +150,24 @@ public class MovieDetailsFragment extends Fragment {
     }
 
     private void onFavouriteChanged() {
+        if(DBUtils.getDefaultInstance().isFavourited(mMovieId)) {
+            // Remove from favourited list
+            DBUtils.getDefaultInstance().removeFromFavourite(mMovieId);
+            // Update label on button
+            mFavouriteButton.setText(getString(R.string.mark_as_favorite));
+        } else {
+            // Add to favorited list
+            DBUtils.getDefaultInstance().addToFavourite(mMovieDetails);
+            // Update label on button
+            mFavouriteButton.setText(getActivity().getString(R.string.label_favourited));
+        }
+    }
 
+    private void showToastMessage(String message) {
+        if(mToast != null) {
+            mToast.cancel();
+        }
+        mToast = Toast.makeText(getActivity(), message, Toast.LENGTH_LONG);
+        mToast.show();
     }
 }

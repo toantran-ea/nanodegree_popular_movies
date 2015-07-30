@@ -1,13 +1,12 @@
 package mobi.toan.popularmovies.utils;
 
-import android.content.Context;
 import android.util.Log;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 import mobi.toan.popularmovies.Constants;
 import mobi.toan.popularmovies.models.MovieDetails;
 import mobi.toan.popularmovies.models.realm.FavouriteMovie;
+import mobi.toan.popularmovies.models.realm.Trailer;
 
 /**
  * Created by toan on 7/30/15.
@@ -56,8 +55,8 @@ public class DBUtils {
     public boolean removeFromFavourite(String movieId) {
         try {
             mDefaultRealm.beginTransaction();
-            RealmResults<FavouriteMovie> realmResults = mDefaultRealm.where(FavouriteMovie.class).equalTo(Constants.MOVIE_ID_DB, movieId).findAll();
-            realmResults.clear();
+            mDefaultRealm.where(FavouriteMovie.class).equalTo(Constants.MOVIE_ID_DB, movieId).findAll().clear();
+            mDefaultRealm.where(Trailer.class).equalTo(Constants.TRAILER_MOVIE_ID, movieId).findAll().clear();
             mDefaultRealm.commitTransaction();
         }catch (Exception ex) {
             Log.e(TAG, ex.getMessage());
@@ -66,7 +65,7 @@ public class DBUtils {
         return true;
     }
 
-    public boolean deleteDB(Context context) {
+    public boolean deleteDB() {
         mDefaultRealm.close();
         return mDefaultRealm.deleteRealm(mDefaultRealm.getConfiguration());
     }

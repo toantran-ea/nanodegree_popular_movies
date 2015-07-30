@@ -28,6 +28,7 @@ public class MovieDetails {
     @JsonProperty("vote_average")
     private String mRating;
 
+    private TrailerList mTrailerList;
 
     public String getId() {
         return id;
@@ -83,5 +84,13 @@ public class MovieDetails {
 
     public void setRating(String rating) {
         this.mRating = rating;
+    }
+
+    public TrailerList getTrailerList() {
+        return mTrailerList;
+    }
+
+    public void setTrailerList(TrailerList trailerList) {
+        mTrailerList = trailerList;
     }
 }
