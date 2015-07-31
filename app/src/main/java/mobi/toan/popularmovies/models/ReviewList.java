@@ -29,9 +29,16 @@ public class ReviewList {
     }
 
     public static class Review {
+        @JsonProperty("id")
         private String mId;
+
+        @JsonProperty("author")
         private String mAuthor;
+
+        @JsonProperty("content")
         private String mContent;
+
+        @JsonProperty("url")
         private String mUrl;
 
         public String getId() {
