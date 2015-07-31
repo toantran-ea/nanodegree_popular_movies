@@ -29,7 +29,6 @@
                 android:maxLines="2"
                 android:paddingLeft="@dimen/text_view_padding"
                 android:paddingRight="@dimen/text_view_padding"
-                android:text="@string/lorem_movie_title"
                 android:textAppearance="@android:style/TextAppearance.Material.Title"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/movie_details_main_title_text_size"/>
@@ -62,7 +61,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:text="@string/lorem_movie_year"
                 android:textSize="@dimen/movie_details_year_text_size"/>
 
             <TextView
@@ -71,7 +69,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/year_text_view"
                 android:layout_marginTop="@dimen/movie_details_info_text_view_margin_top"
-                android:text="@string/lorem_movie_length"
                 android:textSize="@dimen/movie_details_length_text_size"/>
 
             <TextView
@@ -80,7 +77,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/length_text_view"
                 android:layout_marginTop="@dimen/movie_details_info_text_view_margin_top"
-                android:text="@string/lorem_movie_rating"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"/>
 

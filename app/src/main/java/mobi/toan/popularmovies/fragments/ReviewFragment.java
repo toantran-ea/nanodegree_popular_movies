@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Map;
@@ -26,6 +27,8 @@ public class ReviewFragment extends Fragment {
     private static String TAG = ReviewFragment.class.getSimpleName();
     private String mMovieId;
     private RecyclerView mReviewRecyclerView;
+    private TextView mReviewPresentTextView;
+
 
     public static ReviewFragment newInstance(String movieId) {
         ReviewFragment fragment = new ReviewFragment();
@@ -60,6 +63,7 @@ public class ReviewFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mReviewRecyclerView.setLayoutManager(layoutManager);
         mReviewRecyclerView.setHasFixedSize(true);
+        mReviewPresentTextView = (TextView) rootView.findViewById(R.id.reviews_present_text_view);
     }
 
     @Override
@@ -81,7 +85,14 @@ public class ReviewFragment extends Fragment {
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, error.getMessage());
-                Toast.makeText(getActivity(), getString(R.string.error_network_request), Toast.LENGTH_SHORT).show();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mReviewPresentTextView.setText(getString(R.string.text_no_review));
+                        Toast.makeText(getActivity(), getString(R.string.error_network_request), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         });
     }
@@ -89,5 +100,8 @@ public class ReviewFragment extends Fragment {
     private void renderReviews(ReviewList reviewList) {
         ReviewRecyclerViewAdapter adapter = new ReviewRecyclerViewAdapter(getActivity(), reviewList);
         mReviewRecyclerView.setAdapter(adapter);
+        if(reviewList.getReviewList().size() == 0 ) {
+            mReviewPresentTextView.setText(getString(R.string.text_no_review));
+        }
     }
 }
