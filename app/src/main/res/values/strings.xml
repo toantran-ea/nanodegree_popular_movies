@@ -14,4 +14,6 @@
     <string name="text_reviews">Reviews</string>
     <string name="text_all_reviews">All reviews:</string>
     <string name="text_no_review">No review available</string>
+    <string name="message_youtube_not_installed">YouTube not installed on your device</string>
+    <string name="message_youtube_only">Only YouTube video supported only!</string>
 </resources>

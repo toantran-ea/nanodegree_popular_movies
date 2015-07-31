@@ -36,6 +36,10 @@ public class TrailerRecyclerViewAdapter extends RecyclerView.Adapter<TrailerRecy
 
     }
 
+    public TrailerList.Trailer getItem(int position) {
+        return mTrailerList.getTrailers().get(position);
+    }
+
     @Override
     public int getItemCount() {
         return (mTrailerList != null && mTrailerList.getTrailers() != null) ? mTrailerList.getTrailers().size() : 0;

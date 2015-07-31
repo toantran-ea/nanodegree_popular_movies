@@ -1,10 +1,12 @@
 package mobi.toan.popularmovies.fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.youtube.player.YouTubeIntents;
 import com.squareup.picasso.Picasso;
 
 import java.util.Map;
@@ -27,8 +30,9 @@ import mobi.toan.popularmovies.models.events.ReviewFragmentRequestMessage;
 import mobi.toan.popularmovies.rest.RestUtils;
 import mobi.toan.popularmovies.rest.TheMovieDBAPI;
 import mobi.toan.popularmovies.utils.DBUtils;
-import mobi.toan.popularmovies.views.TrailerRecyclerViewAdapter;
 import mobi.toan.popularmovies.utils.Utils;
+import mobi.toan.popularmovies.views.RecyclerItemClickListener;
+import mobi.toan.popularmovies.views.TrailerRecyclerViewAdapter;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -45,7 +49,7 @@ public class MovieDetailsFragment extends Fragment {
     private MovieDetails mMovieDetails;
     private Toast mToast;
 
-    public static MovieDetailsFragment newInstance(String movieId){
+    public static MovieDetailsFragment newInstance(String movieId) {
         MovieDetailsFragment fragment = new MovieDetailsFragment();
         Bundle args = new Bundle();
         args.putString(MOVIE_ID, movieId);
@@ -78,14 +82,14 @@ public class MovieDetailsFragment extends Fragment {
     }
 
     private void initializeComponents(View rootView) {
-        Bundle args  = getArguments();
+        Bundle args = getArguments();
         mMovieId = args.getString(MOVIE_ID);
         mTrailerRecyclerView = (RecyclerView) rootView.findViewById(R.id.trailers_recycler_view);
         mTrailerRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mTrailerRecyclerView.setLayoutManager(mLayoutManager);
         mFavouriteButton = (Button) rootView.findViewById(R.id.favourite_mark_button);
-        if(DBUtils.getDefaultInstance().isFavourited(mMovieId)) {
+        if (DBUtils.getDefaultInstance().isFavourited(mMovieId)) {
             mFavouriteButton.setText(getActivity().getString(R.string.label_favourited));
         }
         mFavouriteButton.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +99,7 @@ public class MovieDetailsFragment extends Fragment {
             }
         });
         TextView reviewTextView = (TextView) rootView.findViewById(R.id.review_text_view);
-        reviewTextView.setOnClickListener(new View.OnClickListener(){
+        reviewTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EventBus.getDefault().post(new ReviewFragmentRequestMessage(mMovieId));
@@ -159,10 +163,21 @@ public class MovieDetailsFragment extends Fragment {
     private void renderTrailers(TrailerList trailerList) {
         mAdapter = new TrailerRecyclerViewAdapter(getActivity(), trailerList);
         mTrailerRecyclerView.setAdapter(mAdapter);
+        mTrailerRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                TrailerList.Trailer trailer = mAdapter.getItem(position);
+                if (Constants.YOUTUBE_SITE.equalsIgnoreCase(trailer.getSite())) {
+                    openYouTube(trailer.getKey());
+                } else {
+                    showToastMessage(getString(R.string.message_youtube_only));
+                }
+            }
+        }));
     }
 
     private void onFavouriteChanged() {
-        if(DBUtils.getDefaultInstance().isFavourited(mMovieId)) {
+        if (DBUtils.getDefaultInstance().isFavourited(mMovieId)) {
             // Remove from favourited list
             DBUtils.getDefaultInstance().removeFromFavourite(mMovieId);
             // Update label on button
@@ -176,10 +191,24 @@ public class MovieDetailsFragment extends Fragment {
     }
 
     private void showToastMessage(String message) {
-        if(mToast != null) {
+        if (mToast != null) {
             mToast.cancel();
         }
         mToast = Toast.makeText(getActivity(), message, Toast.LENGTH_LONG);
         mToast.show();
+    }
+
+    private boolean isYouTubeInstalled() {
+        String version = YouTubeIntents.getInstalledYouTubeVersionName(getActivity());
+        return !TextUtils.isEmpty(version);
+    }
+
+    private void openYouTube(String key) {
+        if (isYouTubeInstalled()) {
+            Intent intent = YouTubeIntents.createPlayVideoIntentWithOptions(getActivity(), key, true, false);
+            startActivity(intent);
+        } else {
+            showToastMessage(getString(R.string.message_youtube_not_installed));
+        }
     }
 }
