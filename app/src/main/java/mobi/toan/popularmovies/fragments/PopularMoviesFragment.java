@@ -60,16 +60,6 @@ public class PopularMoviesFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         loadPopularMovieData();

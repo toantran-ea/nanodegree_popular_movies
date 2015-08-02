@@ -27,18 +27,27 @@ public class DBUtils {
         mDefaultRealm = Realm.getDefaultInstance();
     }
 
-    private DBUtils(Realm realm) {
-        mDefaultRealm = realm;
-    }
-
+    /**
+     * Resets instance of DBUtils.
+     */
     public static void reset() {
         sDefaultInstance = null;
     }
 
+    /**
+     * Checks if a movie(by movieId) is already added as favourite.
+     * @param movieId
+     * @return
+     */
     public boolean isFavourited(String movieId) {
         return mDefaultRealm.where(FavouriteMovie.class).equalTo(Constants.MOVIE_ID_DB, movieId).findAll().size() == 1;
     }
 
+    /**
+     * Adds a movie into favourite list.
+     * @param movieDetails
+     * @return
+     */
     public boolean addToFavourite(MovieDetails movieDetails) {
         FavouriteMovie favouriteMovie = new FavouriteMovie(movieDetails);
         try {
@@ -52,6 +61,11 @@ public class DBUtils {
         return true;
     }
 
+    /**
+     * Removes a movie from favourite list.
+     * @param movieId
+     * @return
+     */
     public boolean removeFromFavourite(String movieId) {
         try {
             mDefaultRealm.beginTransaction();
@@ -65,6 +79,10 @@ public class DBUtils {
         return true;
     }
 
+    /**
+     * Deletes the database.
+     * @return
+     */
     public boolean deleteDB() {
         mDefaultRealm.close();
         return mDefaultRealm.deleteRealm(mDefaultRealm.getConfiguration());
