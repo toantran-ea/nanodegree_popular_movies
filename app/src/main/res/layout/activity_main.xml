@@ -1,16 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:minHeight="?attr/actionBarSize"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary">
-    </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/main_fragment_container"
@@ -18,4 +10,4 @@
         android:layout_height="fill_parent">
     </FrameLayout>
 
-</RelativeLayout>
+</FrameLayout>

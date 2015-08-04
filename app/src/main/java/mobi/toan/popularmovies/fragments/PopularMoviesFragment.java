@@ -1,6 +1,5 @@
 package mobi.toan.popularmovies.fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +12,12 @@ import android.view.ViewGroup;
 
 import java.util.Map;
 
+import de.greenrobot.event.EventBus;
 import mobi.toan.popularmovies.Constants;
 import mobi.toan.popularmovies.MovieDetailActivity;
 import mobi.toan.popularmovies.R;
 import mobi.toan.popularmovies.models.PopularMovieData;
+import mobi.toan.popularmovies.models.events.MenuOptionMessage;
 import mobi.toan.popularmovies.rest.RestUtils;
 import mobi.toan.popularmovies.rest.TheMovieDBAPI;
 import mobi.toan.popularmovies.views.PopularMovieAdapter;
@@ -46,15 +47,42 @@ public class PopularMoviesFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    public void onEvent(MenuOptionMessage event) {
+        switch(event.getMenuOption()){
+            case BY_POPULARITY:
+                Log.e(TAG, "by popular");
+                break;
+            case BY_RATING:
+                Log.e(TAG, "by rating");
+                break;
+            case FAVOURITE:
+                Log.e(TAG, "favourite");
+                break;
+            default: return;
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_popular_movies_fragments, container, false);
+        View root = inflater.inflate(R.layout.fragment_popular_movies, container, false);
         initUIComponents(root);
         return root;
     }

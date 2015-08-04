@@ -16,4 +16,7 @@
     <string name="text_no_review">No review available</string>
     <string name="message_youtube_not_installed">YouTube not installed on your device</string>
     <string name="message_youtube_only">Only YouTube video supported only!</string>
+    <string name="action_sort_by_popularity">By popularity</string>
+    <string name="action_sort_by_rating">By Rating</string>
+    <string name="action_show_favourite">Favourite</string>
 </resources>
