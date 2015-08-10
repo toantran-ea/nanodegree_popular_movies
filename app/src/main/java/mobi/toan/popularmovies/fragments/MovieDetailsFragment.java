@@ -64,11 +64,19 @@ public class MovieDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(TAG, "onCreate " + savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.e(TAG, "onSaveInstanceState " + outState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.e(TAG, "onCreateView " + savedInstanceState);
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_movie_details, container, false);
         initializeComponents(mFragmentView);
@@ -76,7 +84,14 @@ public class MovieDetailsFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.e(TAG, "onActivityCreated "  + savedInstanceState);
+    }
+
+    @Override
     public void onStart() {
+        Log.e(TAG, "onStart ");
         super.onStart();
         getMovieDetails();
     }
