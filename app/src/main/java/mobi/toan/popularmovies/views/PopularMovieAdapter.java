@@ -23,29 +23,33 @@ import mobi.toan.popularmovies.rest.RestUtils;
 public class PopularMovieAdapter extends RecyclerView.Adapter<PopularMovieAdapter.ViewHolder> {
     private static final String TAG = PopularMovieAdapter.class.getSimpleName();
 
-    private List<PopularMovieData.Movie> mDataSet;
+    private List<PopularMovieData.Movie> mDataSource;
     private Context mContext;
 
     public PopularMovieAdapter(Context context, List<PopularMovieData.Movie> dataSet) {
         this.mContext = context;
-        mDataSet = new ArrayList<>();
+        mDataSource = new ArrayList<>();
         if(dataSet != null) {
-            mDataSet.addAll(dataSet);
+            mDataSource.addAll(dataSet);
         }
     }
 
-    public void updateDataSet(List<PopularMovieData.Movie> dataSet) {
-        mDataSet.clear();
+    public List<PopularMovieData.Movie> getDataSource() {
+        return mDataSource;
+    }
+
+    public void updateDataSource(List<PopularMovieData.Movie> dataSet) {
+        mDataSource.clear();
         if(dataSet != null) {
-            mDataSet.addAll(dataSet);
+            mDataSource.addAll(dataSet);
         } else {
-            Log.e(TAG, "updateDataSet() called with empty dataSet");
+            Log.e(TAG, "updateDataSource() called with empty dataSet");
         }
         notifyDataSetChanged();
     }
 
     public PopularMovieData.Movie getItem(int position) {
-        return mDataSet.get(position);
+        return mDataSource.get(position);
     }
 
     @Override
@@ -58,14 +62,14 @@ public class PopularMovieAdapter extends RecyclerView.Adapter<PopularMovieAdapte
 
     @Override
     public void onBindViewHolder(PopularMovieAdapter.ViewHolder holder, int position) {
-        PopularMovieData.Movie item = mDataSet.get(position);
+        PopularMovieData.Movie item = mDataSource.get(position);
         String path = RestUtils.getPosterPath(item.getPosterPath());
         Picasso.with(mContext).load(path).into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return mDataSet.size();
+        return mDataSource.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

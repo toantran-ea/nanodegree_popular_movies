@@ -3,6 +3,7 @@ package mobi.toan.popularmovies.fragments;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
@@ -29,17 +32,15 @@ import retrofit.client.Response;
 public class PopularMoviesFragment extends Fragment {
     private static final String TAG = PopularMoviesFragment.class.getSimpleName();
     private static final int GRID_COLUMNS = 2;
+    public static final String MOVIE_LIST = "movie-list";
+    public static final String DISPLAY_TYPE = "display-type";
 
     private RecyclerView mPopularMovieRecyclerView;
     private PopularMovieAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     public static PopularMoviesFragment newInstance() {
-        PopularMoviesFragment fragment = new PopularMoviesFragment();
-        Bundle args = new Bundle();
-
-        fragment.setArguments(args);
-        return fragment;
+        return new PopularMoviesFragment();
     }
 
     public PopularMoviesFragment() {
@@ -68,12 +69,13 @@ public class PopularMoviesFragment extends Fragment {
         switch(event.getMenuOption()){
             case BY_POPULARITY:
                 Log.e(TAG, "by popular");
+                loadPopularMovieData(true);
                 break;
             case BY_RATING:
-                Log.e(TAG, "by rating");
+                loadPopularMovieData(false);
                 break;
             case FAVOURITE:
-                Log.e(TAG, "favourite");
+                loadOfflineFavouriteMovies();
                 break;
             default: return;
         }
@@ -90,15 +92,34 @@ public class PopularMoviesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadPopularMovieData();
     }
 
-    private void loadPopularMovieData() {
-        Map<String, String> queryParams = RestUtils.createDiscoverRequestParams(true);
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        Log.e(TAG, "onActivityCreated");
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState != null) {
+            List<PopularMovieData.Movie> movies = savedInstanceState.getParcelableArrayList(MOVIE_LIST);
+            Log.e(TAG, "movies " + movies.toString());
+            presentMovieData(movies);
+        } else {
+            Log.e(TAG, "oooooohhhhh!!!");
+            loadPopularMovieData(true);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.e(TAG , "save STATE");
+        outState.putParcelableArrayList(MOVIE_LIST, (ArrayList<? extends Parcelable>) mAdapter.getDataSource());
+    }
+
+    private void loadPopularMovieData(boolean byPopularity) {
+        Map<String, String> queryParams = RestUtils.createDiscoverRequestParams(byPopularity);
         TheMovieDBAPI.getInstance().getService().discoverMovies(queryParams, new Callback<PopularMovieData>() {
             @Override
             public void success(PopularMovieData popularMovieData, Response response) {
-                presentMovieData(popularMovieData);
+                presentMovieData(popularMovieData.getResults());
             }
 
             @Override
@@ -106,6 +127,10 @@ public class PopularMoviesFragment extends Fragment {
                 Log.e(TAG, "failed " + error.getMessage());
             }
         });
+    }
+
+    private void loadOfflineFavouriteMovies() {
+
     }
 
     private void initUIComponents(View rootView) {
@@ -129,7 +154,7 @@ public class PopularMoviesFragment extends Fragment {
         }));
     }
 
-    private void presentMovieData(PopularMovieData popularMovieData) {
-        mAdapter.updateDataSet(popularMovieData.getResults());
+    private void presentMovieData(List<PopularMovieData.Movie> movies) {
+        mAdapter.updateDataSource(movies);
     }
 }

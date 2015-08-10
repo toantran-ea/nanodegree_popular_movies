@@ -1,5 +1,8 @@
 package mobi.toan.popularmovies.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -22,7 +25,6 @@ public class PopularMovieData {
         return mResults;
     }
 
-
     public void setResults(List<Movie> mResults) {
         this.mResults = mResults;
     }
@@ -35,7 +37,7 @@ public class PopularMovieData {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Movie {
+    public static class Movie implements Parcelable {
 
         public Movie() {
 
@@ -68,6 +70,17 @@ public class PopularMovieData {
                     "id='" + id + '\'' +
                     ", posterPath='" + posterPath + '\'' +
                     '}';
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeString(id);
+            parcel.writeString(posterPath);
         }
     }
 }
