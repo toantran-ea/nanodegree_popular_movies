@@ -8,7 +8,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import mobi.toan.popularmovies.models.PopularMovieData;
 import mobi.toan.popularmovies.models.TrailerList;
+import mobi.toan.popularmovies.models.realm.FavouriteMovie;
 import mobi.toan.popularmovies.models.realm.Trailer;
 
 /**
@@ -48,5 +50,20 @@ public class Utils {
             trailers.add(new Trailer(trailer));
         }
         return trailers;
+    }
+
+    public static List<PopularMovieData.Movie> getMovies(List<FavouriteMovie> favouriteMovies) {
+        List<PopularMovieData.Movie> movies = new ArrayList<>();
+        for(FavouriteMovie favouriteMovie : favouriteMovies) {
+            movies.add(convertFromFavouriteToMovie(favouriteMovie));
+        }
+        return movies;
+    }
+
+    public static PopularMovieData.Movie convertFromFavouriteToMovie(FavouriteMovie favouriteMovie) {
+        PopularMovieData.Movie movie = new PopularMovieData.Movie();
+        movie.setId(favouriteMovie.getId());
+        movie.setPosterPath(favouriteMovie.getPosterPath());
+        return movie;
     }
 }

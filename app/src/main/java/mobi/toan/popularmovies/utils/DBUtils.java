@@ -2,6 +2,8 @@ package mobi.toan.popularmovies.utils;
 
 import android.util.Log;
 
+import java.util.List;
+
 import io.realm.Realm;
 import mobi.toan.popularmovies.Constants;
 import mobi.toan.popularmovies.models.MovieDetails;
@@ -86,5 +88,13 @@ public class DBUtils {
     public boolean deleteDB() {
         mDefaultRealm.close();
         return mDefaultRealm.deleteRealm(mDefaultRealm.getConfiguration());
+    }
+
+    /**
+     * Return all local-stored favourite movies.
+     * @return
+     */
+    public List<FavouriteMovie> getAllFavouriteMovies() {
+        return mDefaultRealm.where(FavouriteMovie.class).findAll();
     }
 }
