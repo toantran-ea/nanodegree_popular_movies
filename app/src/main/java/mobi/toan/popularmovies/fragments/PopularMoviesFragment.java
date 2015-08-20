@@ -21,8 +21,11 @@ import mobi.toan.popularmovies.MovieDetailActivity;
 import mobi.toan.popularmovies.R;
 import mobi.toan.popularmovies.models.PopularMovieData;
 import mobi.toan.popularmovies.models.events.MenuOptionMessage;
+import mobi.toan.popularmovies.models.realm.FavouriteMovie;
 import mobi.toan.popularmovies.rest.RestUtils;
 import mobi.toan.popularmovies.rest.TheMovieDBAPI;
+import mobi.toan.popularmovies.utils.DBUtils;
+import mobi.toan.popularmovies.utils.Utils;
 import mobi.toan.popularmovies.views.PopularMovieAdapter;
 import mobi.toan.popularmovies.views.RecyclerItemClickListener;
 import retrofit.Callback;
@@ -130,7 +133,9 @@ public class PopularMoviesFragment extends Fragment {
     }
 
     private void loadOfflineFavouriteMovies() {
-
+        List<FavouriteMovie> favouriteMovies = DBUtils.getDefaultInstance().getAllFavouriteMovies();
+        List<PopularMovieData.Movie> movies = Utils.getMovies(favouriteMovies);
+        presentMovieData(movies);
     }
 
     private void initUIComponents(View rootView) {
