@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+import mobi.toan.popularmovies.models.realm.Trailer;
+
 /**
  * Created by toan on 7/29/15.
  */
@@ -40,6 +42,17 @@ public class TrailerList {
 
         @JsonProperty("key")
         private String mKey;
+
+        public Trailer() {
+
+        }
+
+        public Trailer(mobi.toan.popularmovies.models.realm.Trailer trailer ){
+            setId(trailer.getId());
+            setKey(trailer.getKey());
+            setName(trailer.getName());
+            setSite(trailer.getSite());
+        }
 
         public String getId() {
             return mId;

@@ -27,6 +27,7 @@ import mobi.toan.popularmovies.R;
 import mobi.toan.popularmovies.models.MovieDetails;
 import mobi.toan.popularmovies.models.TrailerList;
 import mobi.toan.popularmovies.models.events.ReviewFragmentRequestMessage;
+import mobi.toan.popularmovies.models.realm.FavouriteMovie;
 import mobi.toan.popularmovies.rest.RestUtils;
 import mobi.toan.popularmovies.rest.TheMovieDBAPI;
 import mobi.toan.popularmovies.utils.DBUtils;
@@ -48,6 +49,7 @@ public class MovieDetailsFragment extends Fragment {
     private Button mFavouriteButton;
     private MovieDetails mMovieDetails;
     private Toast mToast;
+    private boolean mIsOfflineFavourite = false;
 
     public static MovieDetailsFragment newInstance(String movieId) {
         MovieDetailsFragment fragment = new MovieDetailsFragment();
@@ -65,6 +67,9 @@ public class MovieDetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "onCreate " + savedInstanceState);
+        Bundle args = getArguments();
+        mMovieId = args.getString(MOVIE_ID);
+        mIsOfflineFavourite = DBUtils.getDefaultInstance().isFavourited(mMovieId);
     }
 
     @Override
@@ -86,25 +91,36 @@ public class MovieDetailsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.e(TAG, "onActivityCreated "  + savedInstanceState);
+        Log.e(TAG, "onActivityCreated " + savedInstanceState);
     }
 
     @Override
     public void onStart() {
         Log.e(TAG, "onStart ");
         super.onStart();
-        getMovieDetails();
+        if(mIsOfflineFavourite) {
+            loadOfflineFavouriteMovie();
+        } else {
+            getMovieDetails();
+        }
+    }
+
+    private void loadOfflineFavouriteMovie() {
+        FavouriteMovie favouriteMovie = DBUtils.getDefaultInstance().getFavouriteMovie(mMovieId);
+        mMovieDetails = new MovieDetails(favouriteMovie);
+        mMovieDetails.setTrailerList(Utils.getTrailerList(DBUtils.getDefaultInstance().getTrailerOfFavoriteMovie(mMovieId)));
+        renderStaticFields(mFragmentView, mMovieDetails);
+        renderTrailers(mMovieDetails.getTrailerList());
     }
 
     private void initializeComponents(View rootView) {
-        Bundle args = getArguments();
-        mMovieId = args.getString(MOVIE_ID);
+
         mTrailerRecyclerView = (RecyclerView) rootView.findViewById(R.id.trailers_recycler_view);
         mTrailerRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mTrailerRecyclerView.setLayoutManager(mLayoutManager);
         mFavouriteButton = (Button) rootView.findViewById(R.id.favourite_mark_button);
-        if (DBUtils.getDefaultInstance().isFavourited(mMovieId)) {
+        if (mIsOfflineFavourite) {
             mFavouriteButton.setText(getActivity().getString(R.string.label_favourited));
         }
         mFavouriteButton.setOnClickListener(new View.OnClickListener() {

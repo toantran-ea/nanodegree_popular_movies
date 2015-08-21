@@ -60,6 +60,16 @@ public class Utils {
         return movies;
     }
 
+    public static TrailerList getTrailerList(List<Trailer> realmTrailers) {
+        TrailerList trailerList = new TrailerList();
+        List<TrailerList.Trailer> trailers = new ArrayList<>();
+        for(Trailer trailer : realmTrailers) {
+            trailers.add(new TrailerList.Trailer(trailer));
+        }
+        trailerList.setTrailers(trailers);
+        return trailerList;
+    }
+
     public static PopularMovieData.Movie convertFromFavouriteToMovie(FavouriteMovie favouriteMovie) {
         PopularMovieData.Movie movie = new PopularMovieData.Movie();
         movie.setId(favouriteMovie.getId());

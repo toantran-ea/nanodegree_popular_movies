@@ -81,6 +81,14 @@ public class DBUtils {
         return true;
     }
 
+    public FavouriteMovie getFavouriteMovie(String moviedId) {
+        return mDefaultRealm.where(FavouriteMovie.class).equalTo("id", moviedId).findFirst();
+    }
+
+    public List<Trailer> getTrailerOfFavoriteMovie(String movieId) {
+        return mDefaultRealm.where(Trailer.class).equalTo("movieId", movieId).findAll();
+    }
+
     /**
      * Deletes the database.
      * @return

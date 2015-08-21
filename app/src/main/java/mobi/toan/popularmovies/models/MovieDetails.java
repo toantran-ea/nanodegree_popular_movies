@@ -3,6 +3,8 @@ package mobi.toan.popularmovies.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import mobi.toan.popularmovies.models.realm.FavouriteMovie;
+
 /**
  * Created by toan on 7/16/15.
  */
@@ -29,6 +31,19 @@ public class MovieDetails {
     private String mRating;
 
     private TrailerList mTrailerList;
+
+    public MovieDetails() {}
+
+    public MovieDetails(FavouriteMovie favouriteMovie) {
+        setId(favouriteMovie.getId());
+        setLength(favouriteMovie.getLength());
+        setOverview(favouriteMovie.getOverview());
+        setPosterPath(favouriteMovie.getPosterPath());
+        setRating(favouriteMovie.getRating());
+        setTitle(favouriteMovie.getTitle());
+        setYear(favouriteMovie.getYear());
+    }
+
 
     public String getId() {
         return id;

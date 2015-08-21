@@ -43,6 +43,11 @@ public class PopularMovieData {
 
         }
 
+        public Movie(Parcel in) {
+            setId(in.readString());
+            setPosterPath(in.readString());
+        }
+
         private String id;
 
         @JsonProperty("poster_path")
@@ -82,5 +87,16 @@ public class PopularMovieData {
             parcel.writeString(id);
             parcel.writeString(posterPath);
         }
+
+        public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+            public Movie createFromParcel(Parcel in) {
+                return new Movie(in);
+            }
+
+            public Movie[] newArray(int size) {
+                return new Movie[size];
+            }
+        };
+
     }
 }
