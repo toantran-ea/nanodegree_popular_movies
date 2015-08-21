@@ -75,6 +75,7 @@ public class MovieDetailsFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putString("key", "value");
         Log.e(TAG, "onSaveInstanceState " + outState);
     }
 
@@ -92,6 +93,12 @@ public class MovieDetailsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.e(TAG, "onActivityCreated " + savedInstanceState);
+        if(savedInstanceState != null) {
+            String value = savedInstanceState.getString("key");
+            Log.e(TAG, "value = " + value);
+        } else {
+            Log.e(TAG, "savedInstanceState is null");
+        }
     }
 
     @Override

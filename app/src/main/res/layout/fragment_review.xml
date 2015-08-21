@@ -1,24 +1,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="mobi.toan.popularmovies.fragments.ReviewFragment">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                tools:context="mobi.toan.popularmovies.fragments.ReviewFragment">
 
     <TextView
-        android:layout_marginTop="@dimen/review_list_margin_top"
-        android:layout_marginLeft="@dimen/review_list_margin_top"
-        android:text="@string/text_all_reviews"
-        android:layout_width="wrap_content"
         android:id="@+id/reviews_present_text_view"
-        android:textSize="@dimen/review_present_text_size"
-        android:layout_height="wrap_content"/>
-    
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/review_list_margin_top"
+        android:layout_marginTop="@dimen/review_list_margin_top"
+        android:text="@string/text_all_reviews"
+        android:textSize="@dimen/review_present_text_size"/>
+
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/reviews_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/reviews_present_text_view"
         android:layout_marginTop="@dimen/review_list_margin_top"
-        android:id="@+id/reviews_recycler_view"
-        android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:scrollbars="vertical"/>
 
 </RelativeLayout>
