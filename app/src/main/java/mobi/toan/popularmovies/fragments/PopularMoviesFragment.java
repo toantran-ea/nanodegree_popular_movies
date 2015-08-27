@@ -1,6 +1,6 @@
 package mobi.toan.popularmovies.fragments;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -21,6 +21,7 @@ import mobi.toan.popularmovies.MovieDetailActivity;
 import mobi.toan.popularmovies.R;
 import mobi.toan.popularmovies.models.PopularMovieData;
 import mobi.toan.popularmovies.models.events.MenuOptionMessage;
+import mobi.toan.popularmovies.models.events.MovieSelectionMessage;
 import mobi.toan.popularmovies.models.realm.FavouriteMovie;
 import mobi.toan.popularmovies.rest.RestUtils;
 import mobi.toan.popularmovies.rest.TheMovieDBAPI;
@@ -36,7 +37,6 @@ public class PopularMoviesFragment extends Fragment {
     private static final String TAG = PopularMoviesFragment.class.getSimpleName();
     private static final int GRID_COLUMNS = 2;
     public static final String MOVIE_LIST = "movie-list";
-    public static final String DISPLAY_TYPE = "display-type";
 
     private RecyclerView mPopularMovieRecyclerView;
     private PopularMovieAdapter mAdapter;
@@ -69,7 +69,7 @@ public class PopularMoviesFragment extends Fragment {
     }
 
     public void onEvent(MenuOptionMessage event) {
-        switch(event.getMenuOption()){
+        switch (event.getMenuOption()) {
             case BY_POPULARITY:
                 Log.e(TAG, "by popular");
                 loadPopularMovieData(true);
@@ -80,7 +80,8 @@ public class PopularMoviesFragment extends Fragment {
             case FAVOURITE:
                 loadOfflineFavouriteMovies();
                 break;
-            default: return;
+            default:
+                return;
         }
     }
 
@@ -101,19 +102,16 @@ public class PopularMoviesFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         Log.e(TAG, "onActivityCreated");
         super.onActivityCreated(savedInstanceState);
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             List<PopularMovieData.Movie> movies = savedInstanceState.getParcelableArrayList(MOVIE_LIST);
-            Log.e(TAG, "movies " + movies.toString());
             presentMovieData(movies);
         } else {
-            Log.e(TAG, "oooooohhhhh!!!");
             loadPopularMovieData(true);
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.e(TAG , "save STATE");
         outState.putParcelableArrayList(MOVIE_LIST, (ArrayList<? extends Parcelable>) mAdapter.getDataSource());
     }
 
@@ -123,6 +121,7 @@ public class PopularMoviesFragment extends Fragment {
             @Override
             public void success(PopularMovieData popularMovieData, Response response) {
                 presentMovieData(popularMovieData.getResults());
+                presentFirstItem(popularMovieData);
             }
 
             @Override
@@ -149,17 +148,34 @@ public class PopularMoviesFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 PopularMovieData.Movie movie = mAdapter.getItem(position);
-                Log.e(TAG, movie.toString());
-                Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.MOVIE_ID_DB, movie.getId());
-                intent.putExtras(bundle);
-                startActivity(intent);
+                if (getResources().getBoolean(R.bool.has_two_panes)) {
+                    EventBus.getDefault().post(new MovieSelectionMessage(movie.getId()));
+                } else {
+                    startDetailMovieActivity(movie.getId());
+                }
             }
         }));
     }
 
     private void presentMovieData(List<PopularMovieData.Movie> movies) {
         mAdapter.updateDataSource(movies);
+    }
+
+    private void presentFirstItem(PopularMovieData popularMovieData) {
+        // only load present this first item if in dual-pane mode.
+        if (getResources().getBoolean(R.bool.has_two_panes)) {
+            if (popularMovieData != null && popularMovieData.getResults() != null && popularMovieData.getResults().size() > 0) {
+                EventBus.getDefault().post(new MovieSelectionMessage(popularMovieData.getResults().get(0).getId()));
+            }
+        }
+    }
+
+    private void startDetailMovieActivity(String movieId) {
+        Log.e(TAG, "Start detail screen of movie with id: " + movieId);
+        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.MOVIE_ID_DB, movieId);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

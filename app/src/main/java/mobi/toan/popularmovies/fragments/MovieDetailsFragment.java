@@ -1,6 +1,6 @@
 package mobi.toan.popularmovies.fragments;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -26,6 +26,7 @@ import mobi.toan.popularmovies.Constants;
 import mobi.toan.popularmovies.R;
 import mobi.toan.popularmovies.models.MovieDetails;
 import mobi.toan.popularmovies.models.TrailerList;
+import mobi.toan.popularmovies.models.events.MovieSelectionMessage;
 import mobi.toan.popularmovies.models.events.ReviewFragmentRequestMessage;
 import mobi.toan.popularmovies.models.realm.FavouriteMovie;
 import mobi.toan.popularmovies.rest.RestUtils;
@@ -42,7 +43,6 @@ public class MovieDetailsFragment extends Fragment {
     private static final String TAG = MovieDetailsFragment.class.getSimpleName();
     public static final String MOVIE_ID = "movie_id";
     private View mFragmentView;
-    private String mMovieId;
     private RecyclerView mTrailerRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private TrailerRecyclerViewAdapter mAdapter;
@@ -50,12 +50,10 @@ public class MovieDetailsFragment extends Fragment {
     private MovieDetails mMovieDetails;
     private Toast mToast;
     private boolean mIsOfflineFavourite = false;
+    private String mMovieId;
 
-    public static MovieDetailsFragment newInstance(String movieId) {
+    public static MovieDetailsFragment newInstance() {
         MovieDetailsFragment fragment = new MovieDetailsFragment();
-        Bundle args = new Bundle();
-        args.putString(MOVIE_ID, movieId);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -67,15 +65,12 @@ public class MovieDetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "onCreate " + savedInstanceState);
-        Bundle args = getArguments();
-        mMovieId = args.getString(MOVIE_ID);
-        mIsOfflineFavourite = DBUtils.getDefaultInstance().isFavourited(mMovieId);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("key", "value");
+        outState.putString(MOVIE_ID, mMovieId);
         Log.e(TAG, "onSaveInstanceState " + outState);
     }
 
@@ -93,23 +88,32 @@ public class MovieDetailsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.e(TAG, "onActivityCreated " + savedInstanceState);
-        if(savedInstanceState != null) {
-            String value = savedInstanceState.getString("key");
-            Log.e(TAG, "value = " + value);
-        } else {
-            Log.e(TAG, "savedInstanceState is null");
-        }
     }
 
     @Override
     public void onStart() {
-        Log.e(TAG, "onStart ");
         super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    public void loadMovie(String movieId) {
+        mMovieId = movieId;
+        mIsOfflineFavourite = DBUtils.getDefaultInstance().isFavourited(mMovieId);
         if(mIsOfflineFavourite) {
             loadOfflineFavouriteMovie();
         } else {
             getMovieDetails();
         }
+    }
+
+    public void onEvent(MovieSelectionMessage message) {
+        loadMovie(message.getMovieId());
     }
 
     private void loadOfflineFavouriteMovie() {

@@ -1,32 +1,37 @@
 package mobi.toan.popularmovies;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import de.greenrobot.event.EventBus;
+import mobi.toan.popularmovies.fragments.MovieDetailsFragment;
 import mobi.toan.popularmovies.fragments.PopularMoviesFragment;
 import mobi.toan.popularmovies.models.events.MenuOptionMessage;
 
 public class MainActivity extends AppCompatActivity {
     private static final  String TAG = MainActivity.class.getSimpleName();
     private PopularMoviesFragment mFragment;
+
+    // Whether or not we are in dual-pane mode
+    private boolean mIsDualPane = false;
+
+    private PopularMoviesFragment mPopularMoviesFragment;
+    private MovieDetailsFragment mMovieDetailsFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "onCreate");
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_layout);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        mFragment = PopularMoviesFragment.newInstance();
-        fragmentTransaction.add(R.id.main_fragment_container, mFragment);
-        fragmentTransaction.commit();
+        mPopularMoviesFragment = (PopularMoviesFragment) getSupportFragmentManager().findFragmentById(R.id.popular_movies_fragment);
+        mMovieDetailsFragment = (MovieDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.movie_details_fragment);
+
+        // If we are in two-pane layout mode, this activity is no longer necessary
+        mIsDualPane = getResources().getBoolean(R.bool.has_two_panes);
     }
 
     @Override
@@ -39,9 +44,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         Log.e(TAG, "onDestroy");
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.remove(mFragment);
         super.onDestroy();
     }
 

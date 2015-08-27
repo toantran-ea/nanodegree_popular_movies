@@ -1,5 +1,8 @@
 package mobi.toan.popularmovies.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -30,7 +33,7 @@ public class TrailerList {
                 '}';
     }
 
-    public static class Trailer {
+    public static class Trailer implements Parcelable {
         @JsonProperty("id")
         private String mId;
 
@@ -45,6 +48,13 @@ public class TrailerList {
 
         public Trailer() {
 
+        }
+
+        public Trailer(Parcel in) {
+            setId(in.readString());
+            setName(in.readString());
+            setSite(in.readString());
+            setKey(in.readString());
         }
 
         public Trailer(mobi.toan.popularmovies.models.realm.Trailer trailer ){
@@ -95,6 +105,29 @@ public class TrailerList {
                     ", mKey='" + mKey + '\'' +
                     '}';
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(getId());
+            dest.writeString(getName());
+            dest.writeString(getSite());
+            dest.writeString(getKey());
+        }
+
+        public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+            public Trailer createFromParcel(Parcel in) {
+                return new Trailer(in);
+            }
+
+            public Trailer[] newArray(int size) {
+                return new Trailer[size];
+            }
+        };
     }
 
 }

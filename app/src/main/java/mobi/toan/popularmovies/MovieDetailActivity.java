@@ -26,16 +26,14 @@ public class MovieDetailActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_detail);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        String movieId = bundle.getString(Constants.MOVIE_ID_DB);
-        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance(movieId);
-        fragmentTransaction.add(R.id.movie_details_fragment_container, movieDetailsFragment);
-        fragmentTransaction.commit();
+        // If we are in two-pane layout mode, this activity is no longer necessary
+        if (getResources().getBoolean(R.bool.has_two_panes)) {
+            finish();
+            return;
+        }
+
+        setContentView(R.layout.activity_movie_detail);
     }
 
     @Override
